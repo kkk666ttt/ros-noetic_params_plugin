@@ -142,3 +142,11 @@ YAML 事务成功后若 Dynamic 初始化失败，已经提交的 YAML 值保留
 ## 范围
 
 不提供 pluginlib、动态加载、YAML watch/reload、START_ONLY runtime UI、自动生成 cfg、业务 validator、范围同步、跨 Server 事务、组件创建删除、Kernel 生命周期控制、Executor、Debug 或 ROS2。实际验证证据与限制见 [PROJECT_STATE.md](PROJECT_STATE.md)。
+
+## Source Plugin 元数据
+
+[plugin.yaml](plugin.yaml) 声明本库的 Source Plugin 身份 ros1_noetic_params、插件版本 0.1.0、Kernel API >=0.1.0,<0.2.0、Linux、ROS1 Noetic 和 catkin/roscpp/dynamic_reconfigure/yaml-cpp 依赖。命名空间、仓库名与 catkin 包名继续保持现状。规范见 vision_kernel 仓库的 VISION_KERNEL_PLUGIN_SPEC.md。
+
+这是供未来 Plugin Build Manager 使用的元数据，当前独立 CMake 不解析它、不检查其中的 ROS 环境或版本范围。仍按前述命令预先安装 Core，再独立构建本库。当前没有自动发现/安装、Superbuild 或运行时插件加载；把仓库放进 vision_kernel/plugins/ros1_noetic_params 不会自动构建。未来发行层采用 REQUIRED/AUTO/OFF 策略；插件 manifest 不自行降级用户的启用要求。
+
+本地功能测试环境为 Ubuntu 20.04 + Noetic。manifest 只声明 Linux，未额外把 Ubuntu 版本设为硬限制；这不表示其他 Linux 发行版已经通过测试。

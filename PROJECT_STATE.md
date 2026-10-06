@@ -40,3 +40,9 @@
 ## v0.1 packaging 收口
 
 恢复 namespaced include，并采用 standalone Core 外部安装模型。移除 manifest 的 vision_kernel depend，不改 Core、不新增 vendor/rosdep、不改变参数行为。恢复后 Debug 构建及六组 CTest（520 项检查）通过，threshold_demo 运行通过；package.xml 解析/校验通过。全新安装前缀的 include 根目录仅有 ros_params/，九个头文件独立包含检查全部通过；另一个项目通过安装后的导入目标和 namespaced header 编译运行成功。格式、空白与本地链接检查通过。没有重复运行 ASan/UBSan，历史证据仍按初始实现记录。
+
+## Source Plugin 元数据
+
+新增 plugin.yaml，manifest_version=1、name=ros1_noetic_params、version=0.1.0，声明 Kernel API >=0.1.0,<0.2.0、Linux、ROS1 Noetic、catkin 后端及现有库依赖。CMake、package.xml、公开接口和参数行为未修改。规格与元数据已提供，Plugin Build Manager 尚未实现，当前独立构建不执行 manifest 检查。
+
+本次仅检查 YAML 格式、字段与现有构建声明一致性以及文档链接/空白；历史的 520 项检查和 sanitizer 记录不作为 manifest 管理器已实现的证据。YAML 结构/字段类型、manifest 与 CMake/package.xml 版本及依赖一致性、本地文档链接和空白检查均通过；校验使用临时脚本，不构成已实现的 Plugin Build Manager。
