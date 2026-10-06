@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>ros_noetic_params_plugin</name>
+  <version>0.1.0</version>
+  <description>ROS1 Noetic YAML and dynamic_reconfigure bindings for vision_kernel.</description>
+  <maintainer email="kkk666ttt@users.noreply.github.com">vision_kernel maintainers</maintainer>
+  <license>BSD-3-Clause</license>
+  <buildtool_depend>catkin</buildtool_depend>
+  <depend>roscpp</depend>
+  <depend>dynamic_reconfigure</depend>
+  <depend>yaml-cpp</depend>
+  <!-- vision_kernel is installed as a standalone CMake package, not a catkin component. -->
+  <depend>vision_kernel</depend>
+  <test_depend>roslaunch</test_depend>
+  <test_depend>rosmaster</test_depend>
+</package>
