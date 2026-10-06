@@ -1,6 +1,6 @@
 #pragma once
-#include <detail/binding.hpp>
-#include <yaml/yaml_codec.hpp>
+#include <ros_params/detail/binding.hpp>
+#include <ros_params/yaml/yaml_codec.hpp>
 #include <functional>
 #include <string>
 #include <stdexcept>

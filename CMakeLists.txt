@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.16)
 project(ros_noetic_params_plugin VERSION 0.1.0 LANGUAGES CXX)
 
 find_package(catkin REQUIRED COMPONENTS roscpp dynamic_reconfigure)
+# Core is an external standalone CMake prerequisite, installed before this catkin package.
 find_package(vision_kernel CONFIG REQUIRED)
 find_package(yaml-cpp REQUIRED)
 find_package(Threads REQUIRED)
@@ -26,7 +27,7 @@ install(TARGETS ros_noetic_params_plugin
   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
-install(DIRECTORY include/ DESTINATION ${CATKIN_GLOBAL_INCLUDE_DESTINATION})
+install(DIRECTORY include/ros_params DESTINATION ${CATKIN_GLOBAL_INCLUDE_DESTINATION})
 install(FILES README.md PROJECT_STATE.md LICENSE DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION})
 
 include(CTest)

@@ -11,7 +11,8 @@
 - 显式初始化状态机；Kernel 同版本快照到 cfg，运行 callback 单批更新、失败从当前 Kernel 回填，ErrorHandler 异常隔离。
 - 六组契约测试，真实 generated Config/ROS service、隔离 master、多 Server 并发及算法快照读取；一次更新分配失败注入。
 - 安装配置导入独立 Core/yaml-cpp，测试 generated Config 不安装或导出。
-- 公开头文件以 include/ 为根目录，去除 ros_params/ 外层；保留 yaml/、dynamic/ 和内部 detail/ 子目录。
+- 公开头文件恢复 include/ros_params/ 前缀，避免安装后的通用头文件名冲突；源码与安装使用一致的引用路径。
+- packaging 采用方案 A：Core 为必须预先安装的 standalone CMake package；manifest 不声明尚无 ROS package/rosdep 定义的 vision_kernel 名称。CMake 及安装后的导入配置仍强制查找 Core。
 
 ## 验证记录
 
@@ -32,6 +33,10 @@
 - 稳定注册表中正常 Binding 不会自然触发 UNKNOWN/TYPE/FROZEN 拒绝；Dynamic 的更新失败测试通过线程局部的一次分配失败进入真实 ParamServer::update 异常路径，未破坏 Kernel 的 create/remove 并发边界。
 - ROS 编译依赖保持在本库；业务 Config 只在使用方生成，库不导入任何业务算法。
 
-## 头文件目录简化
+## 历史：头文件目录调整
 
-本次删除 include/ros_params/ 外层，同步所有源码引用、安装规则和 README。旧的 `<ros_params/...>` 引用需要改为 `<...>`；C++ 命名空间、catkin 包名和链接目标不变。本次迁移后 Debug 构建及六组 CTest（520 项检查）通过，threshold_demo 运行通过。在全新安装前缀验证所有九个头文件独立包含，以及另一个项目通过 `vision::ros_params` 和 `<ros_params_manager.hpp>` 编译运行；安装目录没有 ros_params/ 外层。格式、空白和本地文档链接检查通过。此次仅改变头文件路径与安装布局，没有重复运行 ASan/UBSan；此前记录属于迁移前的实现验证。
+提交 0f031b4 曾扁平化头文件目录，并通过 Debug 六组 CTest（520 项检查）、独立头文件包含及安装使用方验证。当前工作区恢复 ros_params/ 前缀；使用方应统一采用 README 中的 namespaced include。
+
+## v0.1 packaging 收口
+
+恢复 namespaced include，并采用 standalone Core 外部安装模型。移除 manifest 的 vision_kernel depend，不改 Core、不新增 vendor/rosdep、不改变参数行为。恢复后 Debug 构建及六组 CTest（520 项检查）通过，threshold_demo 运行通过；package.xml 解析/校验通过。全新安装前缀的 include 根目录仅有 ros_params/，九个头文件独立包含检查全部通过；另一个项目通过安装后的导入目标和 namespaced header 编译运行成功。格式、空白与本地链接检查通过。没有重复运行 ASan/UBSan，历史证据仍按初始实现记录。

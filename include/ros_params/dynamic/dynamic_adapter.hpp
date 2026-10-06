@@ -1,5 +1,5 @@
 #pragma once
-#include <dynamic/dynamic_bindings.hpp>
+#include <ros_params/dynamic/dynamic_bindings.hpp>
 #include <dynamic_reconfigure/server.h>
 #include <ros/node_handle.h>
 #include <atomic>

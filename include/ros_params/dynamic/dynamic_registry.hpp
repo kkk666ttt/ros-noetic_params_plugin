@@ -1,5 +1,5 @@
 #pragma once
-#include <dynamic/dynamic_adapter.hpp>
+#include <ros_params/dynamic/dynamic_adapter.hpp>
 #include <memory>
 #include <string>
 #include <unordered_set>

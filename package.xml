@@ -9,8 +9,8 @@
   <depend>roscpp</depend>
   <depend>dynamic_reconfigure</depend>
   <depend>yaml-cpp</depend>
-  <!-- vision_kernel is installed as a standalone CMake package, not a catkin component. -->
-  <depend>vision_kernel</depend>
+  <!-- vision_kernel is an externally installed CMake prerequisite.
+       No ROS package or rosdep key is supplied in v0.1; see README.md. -->
   <test_depend>roslaunch</test_depend>
   <test_depend>rosmaster</test_depend>
 </package>

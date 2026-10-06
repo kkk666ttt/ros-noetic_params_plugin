@@ -12,7 +12,9 @@ ROS1 Noetic 官方参数适配层 v0.1，C++ 命名空间为 `vision::ros_params
 
 ## 构建与验证
 
-依赖 ROS1 Noetic 的 catkin、roscpp、dynamic_reconfigure，以及 yaml-cpp、独立安装的 vision_kernel。Core 不需要改成 catkin 包；其 CMake 包必须能通过 `find_package(vision_kernel CONFIG REQUIRED)` 找到。仅运行 rosdep 不会替你构建本地 Core。
+依赖 ROS1 Noetic 的 catkin、roscpp、dynamic_reconfigure，以及 yaml-cpp、独立安装的 vision_kernel。采用方案 A：vision_kernel 保持纯 standalone CMake，不添加 ROS package.xml、vendor 包或 rosdep rule。适配库的 package.xml 只声明可由 ROS 工具链识别的依赖，当前不声明 vision_kernel 这个尚无 package/rosdep 定义的名称；它仍是构建和下游接入的必需依赖，由用户先独立安装。其 CMake 包必须能通过 `find_package(vision_kernel CONFIG REQUIRED)` 找到。仅运行 rosdep 不会替你构建本地 Core。
+
+非 catkin 库也可以成为 manifest 依赖：ROS 依赖标签使用 ROS package 名或系统 rosdep key，见 [REP 140](https://github.com/ros-infrastructure/rep/blob/master/rep-0140.rst)。当前项目没有提供 Core 的 ROS manifest 或 rosdep rule，所以 v0.1 按源码构建、预先安装 Core 的约定接入；不依赖 ROS 工具自动部署 Core。
 
 以下命令在 bash 中执行，假设两个源码目录相邻：
 
@@ -42,7 +44,7 @@ target_link_libraries(your_target PRIVATE vision::ros_params)
 
 `CMAKE_PREFIX_PATH` 须包含本库、Core 和 ROS 的安装前缀。业务 generated Config 由业务包自己的 `generate_dynamic_reconfigure_options()` 构建，并自行添加相应生成目标依赖。`vision::ros_params` 自动提供 C++17、公开头文件及传递链接依赖。
 
-公开头文件以 `include/` 为引用根目录：`<ros_params_manager.hpp>`、`<error.hpp>`、`<yaml/yaml_bindings.hpp>`、`<dynamic/dynamic_registry.hpp>`。`yaml/`、`dynamic/` 和内部 `detail/` 子目录保留，不再套一层 `ros_params/`。安装和源码构建使用同样的引用方式。
+公开头文件位于 `include/ros_params/`，以 `include/` 为引用根目录：`<ros_params/ros_params_manager.hpp>`、`<ros_params/error.hpp>`、`<ros_params/yaml/yaml_bindings.hpp>`、`<ros_params/dynamic/dynamic_registry.hpp>`。`ros_params/` 是安装后的头文件命名空间，避免将通用 error.hpp、detail/、yaml/、dynamic/ 名称直接放入全局 include 前缀。安装和源码构建使用同样的引用方式。
 
 ## 注册与启动
 
@@ -50,7 +52,7 @@ target_link_libraries(your_target PRIVATE vision::ros_params)
 
 ```cpp
 #include <kernel.hpp>
-#include <ros_params_manager.hpp>
+#include <ros_params/ros_params_manager.hpp>
 #include <ros/ros.h>
 #include <example/SampleConfig.h> // 使用方在自己的包中生成
 

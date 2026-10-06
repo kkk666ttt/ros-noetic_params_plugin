@@ -1,4 +1,4 @@
-#include <yaml/yaml_adapter.hpp>
+#include <ros_params/yaml/yaml_adapter.hpp>
 #include <exception>
 #include <stdexcept>
 #include <string>

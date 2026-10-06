@@ -1,4 +1,4 @@
-#include <ros_params_manager.hpp>
+#include <ros_params/ros_params_manager.hpp>
 #include <kernel.hpp>
 #include <ros_noetic_params_plugin/PrimaryConfig.h>
 #include <ros_noetic_params_plugin/SecondaryConfig.h>
