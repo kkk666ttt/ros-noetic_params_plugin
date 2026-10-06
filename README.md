@@ -42,13 +42,15 @@ target_link_libraries(your_target PRIVATE vision::ros_params)
 
 `CMAKE_PREFIX_PATH` 须包含本库、Core 和 ROS 的安装前缀。业务 generated Config 由业务包自己的 `generate_dynamic_reconfigure_options()` 构建，并自行添加相应生成目标依赖。`vision::ros_params` 自动提供 C++17、公开头文件及传递链接依赖。
 
+公开头文件以 `include/` 为引用根目录：`<ros_params_manager.hpp>`、`<error.hpp>`、`<yaml/yaml_bindings.hpp>`、`<dynamic/dynamic_registry.hpp>`。`yaml/`、`dynamic/` 和内部 `detail/` 子目录保留，不再套一层 `ros_params/`。安装和源码构建使用同样的引用方式。
+
 ## 注册与启动
 
 所有 Component 先完成 `onInit()`，随后创建 Manager、注册 Binding、初始化，最后启动 Kernel 和宿主 spinner。
 
 ```cpp
 #include <kernel.hpp>
-#include <ros_params/ros_params_manager.hpp>
+#include <ros_params_manager.hpp>
 #include <ros/ros.h>
 #include <example/SampleConfig.h> // 使用方在自己的包中生成
 

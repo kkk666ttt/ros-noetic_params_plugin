@@ -1,4 +1,4 @@
-#include <ros_params/error.hpp>
+#include <error.hpp>
 #include <ros/console.h>
 #include <exception>
 

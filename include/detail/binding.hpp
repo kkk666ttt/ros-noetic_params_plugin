@@ -1,5 +1,5 @@
 #pragma once
-#include <ros_params/error.hpp>
+#include <error.hpp>
 #include <param_server.hpp>
 #include <algorithm>
 #include <string>

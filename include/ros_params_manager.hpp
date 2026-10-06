@@ -1,6 +1,6 @@
 #pragma once
-#include <ros_params/dynamic/dynamic_registry.hpp>
-#include <ros_params/yaml/yaml_adapter.hpp>
+#include <dynamic/dynamic_registry.hpp>
+#include <yaml/yaml_adapter.hpp>
 #include <ros/node_handle.h>
 #include <string>
 

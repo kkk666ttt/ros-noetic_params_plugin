@@ -1,5 +1,5 @@
 #pragma once
-#include <ros_params/yaml/yaml_bindings.hpp>
+#include <yaml/yaml_bindings.hpp>
 #include <string>
 #include <vector>
 

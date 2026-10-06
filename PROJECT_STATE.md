@@ -11,10 +11,11 @@
 - 显式初始化状态机；Kernel 同版本快照到 cfg，运行 callback 单批更新、失败从当前 Kernel 回填，ErrorHandler 异常隔离。
 - 六组契约测试，真实 generated Config/ROS service、隔离 master、多 Server 并发及算法快照读取；一次更新分配失败注入。
 - 安装配置导入独立 Core/yaml-cpp，测试 generated Config 不安装或导出。
+- 公开头文件以 include/ 为根目录，去除 ros_params/ 外层；保留 yaml/、dynamic/ 和内部 detail/ 子目录。
 
 ## 验证记录
 
-本地环境为 GCC 9.4、ROS1 Noetic、yaml-cpp 和 Python 3.8。Debug 下六组 CTest 共 520 项检查通过；同样的六组测试在 Core、Adapter 和测试程序均启用 AddressSanitizer / UndefinedBehaviorSanitizer 的构建中通过。包含第 1/16/27/30 项解码失败的 30 参数事务、默认值 128 不覆盖 YAML 180、初始化 callback 不发布版本、多字段单版本、转换错误/更新分配失败回滚及 ErrorHandler 抛异常。
+本地环境为 GCC 9.4、ROS1 Noetic、yaml-cpp 和 Python 3.8。初始实现（提交 1b81dd6）在 Debug 下六组 CTest 共 520 项检查通过；同样的六组测试在 Core、Adapter 和测试程序均启用 AddressSanitizer / UndefinedBehaviorSanitizer 的构建中通过。包含第 1/16/27/30 项解码失败的 30 参数事务、默认值 128 不覆盖 YAML 180、初始化 callback 不发布版本、多字段单版本、转换错误/更新分配失败回滚及 ErrorHandler 抛异常。
 
 未修改的 Core 在临时独立构建中三套 CTest（普通、分配失败、Eigen）及 threshold_demo 通过。
 
@@ -30,3 +31,7 @@
 - 回滚 converter 必须能表示当前合法 Kernel 值。回滚本身失败时报告错误并禁用 Adapter，不能声称 UI 已恢复。
 - 稳定注册表中正常 Binding 不会自然触发 UNKNOWN/TYPE/FROZEN 拒绝；Dynamic 的更新失败测试通过线程局部的一次分配失败进入真实 ParamServer::update 异常路径，未破坏 Kernel 的 create/remove 并发边界。
 - ROS 编译依赖保持在本库；业务 Config 只在使用方生成，库不导入任何业务算法。
+
+## 头文件目录简化
+
+本次删除 include/ros_params/ 外层，同步所有源码引用、安装规则和 README。旧的 `<ros_params/...>` 引用需要改为 `<...>`；C++ 命名空间、catkin 包名和链接目标不变。本次迁移后 Debug 构建及六组 CTest（520 项检查）通过，threshold_demo 运行通过。在全新安装前缀验证所有九个头文件独立包含，以及另一个项目通过 `vision::ros_params` 和 `<ros_params_manager.hpp>` 编译运行；安装目录没有 ros_params/ 外层。格式、空白和本地文档链接检查通过。此次仅改变头文件路径与安装布局，没有重复运行 ASan/UBSan；此前记录属于迁移前的实现验证。

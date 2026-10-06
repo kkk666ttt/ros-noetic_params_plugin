@@ -1,5 +1,5 @@
 #pragma once
-#include <ros_params/detail/binding.hpp>
+#include <detail/binding.hpp>
 #include <functional>
 #include <string>
 #include <stdexcept>
